@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datadog Part 1: Process Startup & CPU Profiling Flow</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .diagram {
+            width: 100%;
+            max-width: 1140px;
+            height: auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #1a237e;
+            margin: 0 0 10px 0;
+        }
+        .header p {
+            color: #666;
+            margin: 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Datadog Part 1: Process Startup & CPU Profiling Flow</h1>
+            <p>Performance Profiling & Resource Attribution on Process Execution</p>
+        </div>
+        
+        <svg class="diagram" width="1140" height="650" viewBox="0 0 1140 650" xmlns="http://www.w3.org/2000/svg">
+          <!-- Arrow definitions -->
+          <defs>
+            <marker id="blue-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+              <polygon points="0 0, 6 2.5, 0 5" fill="#2196f3"/>
+            </marker>
+            <marker id="orange-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+              <polygon points="0 0, 6 2.5, 0 5" fill="#ff9800"/>
+            </marker>
+            <marker id="purple-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+              <polygon points="0 0, 6 2.5, 0 5" fill="#673ab7"/>
+            </marker>
+            <marker id="green-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+              <polygon points="0 0, 6 2.5, 0 5" fill="#4caf50"/>
+            </marker>
+            <marker id="teal-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+              <polygon points="0 0, 6 2.5, 0 5" fill="#26a69a"/>
+            </marker>
+          </defs>
+          
+          <!-- DATADOG PART 1: PROCESS STARTUP & PROFILING -->
+          <g id="datadog-part1" transform="translate(0, 20)">
+            <!-- Title -->
+            <text x="570" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#2c3e50" font-family="Arial, sans-serif">Part 1: Process Startup & CPU Profiling Flow - Performance Attribution</text>
+            <text x="570" y="50" text-anchor="middle" font-size="14" fill="#666" font-family="Arial, sans-serif">How Datadog monitors process execution and collects performance data</text>
+            
+            <!-- Background layers -->
+            <rect x="70" y="70" width="1070" height="100" fill="#e8f5e8" stroke="#27ae60" stroke-width="2" rx="8"/>
+            <text x="605" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#27ae60" font-family="Arial, sans-serif">Userspace Applications</text>
+            
+            <rect x="70" y="190" width="1070" height="350" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" rx="8"/>
+            <text x="605" y="210" text-anchor="middle" font-size="16" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">Kernel Space</text>
+            
+            <!-- Applications -->
+            <rect x="100" y="100" width="140" height="50" fill="#4caf50" stroke="#2e7d32" stroke-width="2" rx="5"/>
+            <text x="170" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">Application Process</text>
+            <text x="170" y="135" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Starts & Executes</text>
+            
+            <rect x="960" y="100" width="140" height="50" fill="#4caf50" stroke="#2e7d32" stroke-width="2" rx="5"/>
+            <text x="1030" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">Datadog Agent</text>
+            <text x="1030" y="135" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Performance Analysis</text>
+            
+            <!-- Kernel Components -->
+            <rect x="100" y="230" width="140" height="50" fill="#ff7043" stroke="#d84315" stroke-width="2" rx="5"/>
+            <text x="170" y="240" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">tracepoint/sched</text>
+            <text x="170" y="255" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Process Execution</text>
+            <text x="170" y="270" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">sched_process_exec</text>
+            
+            <rect x="300" y="230" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+            <text x="370" y="240" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Datadog eBPF</text>
+            <text x="370" y="255" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Program (DeP)</text>
+            <text x="370" y="270" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Process Context Extraction</text>
+            <text x="370" y="284" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">bpf_get_current_pid_tgid()</text>
+            
+            <rect x="520" y="230" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+            <text x="590" y="240" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">DeP Container</text>
+            <text x="590" y="255" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Correlation</text>
+            <text x="590" y="270" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Read cgroup metadata</text>
+            <text x="590" y="284" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">bpf_probe_read_str()</text>
+            
+            <!-- Swapped: eBPF Maps now in first row -->
+            <rect x="740" y="230" width="140" height="60" fill="#26a69a" stroke="#00695c" stroke-width="2" rx="5"/>
+            <text x="810" y="245" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">eBPF Maps</text>
+            <text x="810" y="260" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Process Metadata</text>
+            <text x="810" y="275" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Container Context</text>
+            
+            <rect x="960" y="230" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+            <text x="1030" y="240" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">DeP Data Export</text>
+            <text x="1030" y="255" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Send to Userspace</text>
+            <text x="1030" y="270" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Performance Samples</text>
+            <text x="1030" y="284" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">bpf_perf_event_output()</text>
+            
+            <!-- Lower Row Blocks -->
+            <!-- Swapped: Stack Trace Collection now in second row -->
+            <rect x="520" y="350" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+            <text x="590" y="360" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">DeP Stack Trace</text>
+            <text x="590" y="375" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Collection</text>
+            <text x="590" y="390" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Continuous CPU Profiling</text>
+            <text x="590" y="404" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">bpf_get_stackid()</text>
+            
+            <rect x="740" y="350" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+            <text x="810" y="360" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">DeP Performance</text>
+            <text x="810" y="375" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Attribution</text>
+            <text x="810" y="390" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">CPU time correlation</text>
+            <text x="810" y="404" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Function-level analysis</text>
+            
+            <!-- Flow Arrows -->
+            <line x1="170" y1="150" x2="170" y2="230" stroke="#4caf50" stroke-width="3" marker-end="url(#green-arrow)"/>
+            <text x="195" y="185" text-anchor="middle" font-size="9" fill="#4caf50" font-weight="bold" font-family="Arial, sans-serif">executes</text>
+            <circle cx="170" cy="190" r="8" fill="#fff" stroke="#4caf50" stroke-width="2"/>
+            <text x="170" y="195" text-anchor="middle" font-size="9" font-weight="bold" fill="#4caf50" font-family="Arial, sans-serif">1</text>
+            
+            <line x1="240" y1="255" x2="300" y2="255" stroke="#ff7043" stroke-width="3" marker-end="url(#orange-arrow)"/>
+            <text x="270" y="245" text-anchor="middle" font-size="9" fill="#ff7043" font-weight="bold" font-family="Arial, sans-serif">triggers</text>
+            <circle cx="270" cy="255" r="8" fill="#fff" stroke="#ff7043" stroke-width="2"/>
+            <text x="270" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#ff7043" font-family="Arial, sans-serif">2</text>
+            
+            <!-- Container Correlation AND Stack Trace Collection (simultaneous) -->
+            <line x1="440" y1="255" x2="520" y2="255" stroke="#2196f3" stroke-width="3" marker-end="url(#blue-arrow)"/>
+            <text x="480" y="245" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif">extracts</text>
+            <circle cx="480" cy="255" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+            <text x="480" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">3</text>
+            
+            <!-- Simultaneous Stack Trace Collection - now to second row -->
+            <line x1="440" y1="275" x2="520" y2="380" stroke="#2196f3" stroke-width="3" marker-end="url(#blue-arrow)"/>
+            <text x="450" y="335" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(45 450 335)">samples</text>
+            <circle cx="480" cy="328" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+            <text x="480" y="333" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">3</text>
+            
+            <!-- Container Correlation stores to eBPF Maps - now to first row -->
+            <line x1="660" y1="255" x2="740" y2="255" stroke="#2196f3" stroke-width="2" marker-end="url(#blue-arrow)"/>
+            <text x="700" y="245" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif">stores</text>
+            <circle cx="700" cy="255" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+            <text x="700" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">4</text>
+            
+            <!-- Stack Trace Collection to Performance Attribution - now from second row -->
+            <line x1="660" y1="380" x2="740" y2="380" stroke="#2196f3" stroke-width="2" marker-end="url(#blue-arrow)"/>
+            <text x="700" y="370" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif">feeds</text>
+            <circle cx="700" cy="380" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+            <text x="700" y="385" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">5</text>
+            
+            <!-- Performance Attribution reads from eBPF Maps - now from first row -->
+            <line x1="810" y1="290" x2="810" y2="350" stroke="#26a69a" stroke-width="2" marker-end="url(#teal-arrow)"/>
+            <text x="830" y="320" text-anchor="middle" font-size="7" fill="#26a69a" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(-90 830 320)">reads metadata</text>
+            <circle cx="810" cy="320" r="8" fill="#fff" stroke="#26a69a" stroke-width="2"/>
+            <text x="810" y="325" text-anchor="middle" font-size="9" font-weight="bold" fill="#26a69a" font-family="Arial, sans-serif">6</text>
+            
+            <!-- Performance Attribution to Data Export -->
+            <line x1="880" y1="380" x2="960" y2="255" stroke="#2196f3" stroke-width="2" marker-end="url(#blue-arrow)"/>
+            <text x="940" y="315" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(-55 940 315)">exports</text>
+            <circle cx="920" cy="318" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+            <text x="920" y="323" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">7</text>
+            
+            <!-- Data Export to Datadog Agent -->
+            <line x1="1030" y1="230" x2="1030" y2="150" stroke="#2196f3" stroke-width="3" marker-end="url(#blue-arrow)"/>
+            <text x="1065" y="183" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif">profile data</text>
+            <circle cx="1030" cy="180" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+            <text x="1030" y="185" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">8</text>
+            
+            <!-- Process Flow Labels -->
+            <text x="570" y="450" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a237e" font-family="Arial, sans-serif">Process Flow:</text>
+            <text x="120" y="470" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">1. Application process starts execution</text>
+            <text x="120" y="485" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">2. tracepoint/sched intercepts process startup event</text>
+            <text x="120" y="500" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">3. Datadog eBPF program extracts process context</text>
+            <text x="120" y="515" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">3. eBPF program triggers container correlation AND stack trace sampling simultaneously</text>
+            <text x="120" y="530" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">4. Container correlation stores metadata in eBPF Maps</text>
+            <text x="635" y="470" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">5. Stack trace collection feeds performance attribution</text>
+            <text x="635" y="485" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">6. Performance attribution reads metadata from eBPF Maps</text>
+            <text x="635" y="500" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">7. Performance attribution exports to data export</text>
+            <text x="635" y="515" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">8. Data export sends profile data to Datadog Agent</text>
+          </g>
+          
+          <!-- COLOR LEGEND -->
+          <g transform="translate(150, 580)">
+            <text x="420" y="0" text-anchor="middle" font-size="14" font-weight="bold" fill="#333" font-family="Arial, sans-serif">Color Legend</text>
+            
+            <!-- Row 1 -->
+            <rect x="0" y="15" width="18" height="15" fill="#4caf50" stroke="#2e7d32" stroke-width="1" rx="3"/>
+            <text x="25" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">Userspace Applications</text>
+            
+            <rect x="200" y="15" width="18" height="15" fill="#26a69a" stroke="#00695c" stroke-width="1" rx="3"/>
+            <text x="225" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">eBPF Maps (Kernel Storage)</text>
+            
+            <rect x="420" y="15" width="18" height="15" fill="#ff7043" stroke="#d84315" stroke-width="1" rx="3"/>
+            <text x="445" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">Kernel Hooks (tracepoint)</text>
+            
+            <!-- Row 2 -->
+            <rect x="100" y="40" width="18" height="15" fill="#42a5f5" stroke="#1976d2" stroke-width="1" rx="3"/>
+            <text x="125" y="51" font-size="11" fill="#333" font-family="Arial, sans-serif">Datadog eBPF Program and Its Functions</text>
+          </g>
+          
+          <!-- Attribution -->
+          <text x="980" y="630" font-size="10" fill="#7f8c8d" font-style="italic" font-family="Arial, sans-serif">Abdullah Mohammed</text>
+        </svg>
+    </div>
+</body>
+</html>
