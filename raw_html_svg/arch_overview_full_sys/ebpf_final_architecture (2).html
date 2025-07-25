@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBPF Architecture Overview</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: #f8f9fa;
+        }
+        .diagram-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 1020px;
+            margin: 0 auto;
+        }
+        .diagram-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagram-container">
+        <div class="diagram-title">eBPF Architecture Overview</div>
+        <svg width="980" height="820" viewBox="0 0 980 820" xmlns="http://www.w3.org/2000/svg">
+            <!-- Arrow definitions -->
+            <defs>
+                <marker id="arrowhead" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 6 2.5, 0 5" fill="#666"/>
+                </marker>
+                <marker id="arrowhead-start" markerWidth="6" markerHeight="5" refX="1" refY="2.5" orient="auto">
+                    <polygon points="6 0, 0 2.5, 6 5" fill="#666"/>
+                </marker>
+                <marker id="blue-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 6 2.5, 0 5" fill="#2196f3"/>
+                </marker>
+                <marker id="blue-arrow-start" markerWidth="6" markerHeight="5" refX="1" refY="2.5" orient="auto">
+                    <polygon points="6 0, 0 2.5, 6 5" fill="#2196f3"/>
+                </marker>
+                <marker id="teal-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 6 2.5, 0 5" fill="#26a69a"/>
+                </marker>
+                <marker id="orange-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 6 2.5, 0 5" fill="#ff9800"/>
+                </marker>
+                <marker id="purple-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 6 2.5, 0 5" fill="#9c27b0"/>
+                </marker>
+                <marker id="purple-arrow-start" markerWidth="6" markerHeight="5" refX="1" refY="2.5" orient="auto">
+                    <polygon points="6 0, 0 2.5, 6 5" fill="#9c27b0"/>
+                </marker>
+                <marker id="green-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 6 2.5, 0 5" fill="#4caf50"/>
+                </marker>
+                <marker id="green-arrow-start" markerWidth="6" markerHeight="5" refX="1" refY="2.5" orient="auto">
+                    <polygon points="6 0, 0 2.5, 6 5" fill="#4caf50"/>
+                </marker>
+            </defs>
+            
+            <!-- EBPF ARCHITECTURE OVERVIEW -->
+            <g id="ebpf-architecture" transform="translate(0, 20)">
+                <!-- Title -->
+                <text x="490" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#2c3e50" font-family="Arial, sans-serif">eBPF Architecture Overview - Complete System Workflow</text>
+                <text x="490" y="50" text-anchor="middle" font-size="14" fill="#666" font-family="Arial, sans-serif">Safe, programmable access to kernel for system-wide observability</text>
+                
+                <!-- Background layers -->
+                <rect x="50" y="70" width="880" height="100" fill="#e8f5e8" stroke="#27ae60" stroke-width="2" rx="8"/>
+                <text x="490" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#27ae60" font-family="Arial, sans-serif">Userspace</text>
+                
+                <rect x="50" y="190" width="880" height="440" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" rx="8"/>
+                <text x="490" y="210" text-anchor="middle" font-size="16" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">Kernel Space</text>
+                
+                <!-- Applications -->
+                <rect x="80" y="100" width="240" height="50" fill="#4caf50" stroke="#2e7d32" stroke-width="2" rx="5"/>
+                <text x="200" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Applications (monitored process)</text>
+                <text x="200" y="135" text-anchor="middle" font-size="9" fill="white">Web Servers, Databases, Microservices</text>
+                
+                <!-- Userspace eBPF Tools -->
+                <rect x="660" y="100" width="240" height="50" fill="#66bb6a" stroke="#388e3c" stroke-width="2" rx="5"/>
+                <text x="780" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="white">eBPF Tools</text>
+                <text x="780" y="135" text-anchor="middle" font-size="9" fill="white">Pixie Agent, Cilium CLI, Datadog Agent</text>
+                
+                <!-- Kernel Components - First Row -->
+                <rect x="80" y="230" width="140" height="60" fill="#ff7043" stroke="#d84315" stroke-width="2" rx="5"/>
+                <text x="150" y="250" text-anchor="middle" font-size="10" font-weight="bold" fill="white">eBPF Hook Points</text>
+                <text x="150" y="265" text-anchor="middle" font-size="8" fill="white">System Calls, Network Stack</text>
+                <text x="150" y="280" text-anchor="middle" font-size="8" fill="white">Tracepoints, Socket Ops</text>
+                
+                <rect x="320" y="230" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+                <text x="390" y="250" text-anchor="middle" font-size="10" font-weight="bold" fill="white">eBPF-based Programs</text>
+                <text x="390" y="265" text-anchor="middle" font-size="8" fill="white">Kernel Components</text>
+                <text x="390" y="280" text-anchor="middle" font-size="8" fill="white">of eBPF Tools</text>
+                
+                <rect x="520" y="230" width="140" height="60" fill="#26a69a" stroke="#00695c" stroke-width="2" rx="5"/>
+                <text x="590" y="255" text-anchor="middle" font-size="11" font-weight="bold" fill="white">JIT Compiler</text>
+                <text x="590" y="270" text-anchor="middle" font-size="9" fill="white">Native Code</text>
+                <text x="590" y="285" text-anchor="middle" font-size="8" fill="white">Optimization</text>
+                
+                <rect x="760" y="230" width="140" height="60" fill="#26a69a" stroke="#00695c" stroke-width="2" rx="5"/>
+                <text x="830" y="255" text-anchor="middle" font-size="11" font-weight="bold" fill="white">eBPF Verifier</text>
+                <text x="830" y="270" text-anchor="middle" font-size="9" fill="white">Safety Checks</text>
+                <text x="830" y="285" text-anchor="middle" font-size="8" fill="white">Kernel Memory</text>
+                
+                <!-- Kernel Components - Second Row -->
+                <rect x="560" y="350" width="140" height="60" fill="#26a69a" stroke="#00695c" stroke-width="2" rx="5"/>
+                <text x="630" y="375" text-anchor="middle" font-size="11" font-weight="bold" fill="white">eBPF Maps</text>
+                <text x="630" y="390" text-anchor="middle" font-size="9" fill="white">Shared Data</text>
+                <text x="630" y="405" text-anchor="middle" font-size="8" fill="white">Configuration</text>
+                
+                <rect x="320" y="350" width="160" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+                <text x="400" y="370" text-anchor="middle" font-size="10" font-weight="bold" fill="white">Data injection/packet decisions</text>
+                <text x="400" y="385" text-anchor="middle" font-size="8" fill="white">Trace ID injection</text>
+                <text x="400" y="395" text-anchor="middle" font-size="8" fill="white">Header modification</text>
+                <text x="400" y="405" text-anchor="middle" font-size="8" fill="white">Drop/allow packets</text>
+                
+                <!-- Hardware Infrastructure -->
+                <rect x="50" y="650" width="880" height="40" fill="#616161" stroke="none" rx="8"/>
+                <text x="490" y="670" text-anchor="middle" font-size="16" font-weight="bold" fill="white" font-family="Arial, sans-serif">Hardware Infrastructure</text>
+                <text x="490" y="685" text-anchor="middle" font-size="10" fill="#e0e0e0">CPU, Network Interface, Storage, Memory</text>
+                
+                <!-- Flow Arrows -->
+                <line x1="150" y1="150" x2="150" y2="230" stroke="#4caf50" stroke-width="3" marker-end="url(#green-arrow)"/>
+                <text x="160" y="185" text-anchor="left" font-size="9" fill="#4caf50" font-weight="bold">triggers events</text>
+                <circle cx="150" cy="190" r="8" fill="#fff" stroke="#4caf50" stroke-width="2"/>
+                <text x="150" y="195" text-anchor="middle" font-size="9" font-weight="bold" fill="#4caf50" font-family="Arial, sans-serif">1</text>
+                
+                <!-- INITIALIZATION PHASE - All Purple -->
+                <line x1="830" y1="150" x2="830" y2="230" stroke="#9c27b0" stroke-width="3" marker-end="url(#purple-arrow)"/>
+                <text x="850" y="220" text-anchor="left" font-size="9" fill="#9c27b0" font-weight="bold" transform="rotate(-90 850 220)">load programs</text>
+                <circle cx="830" cy="190" r="8" fill="#fff" stroke="#9c27b0" stroke-width="2"/>
+                <text x="830" y="195" text-anchor="middle" font-size="8" font-weight="bold" fill="#9c27b0" font-family="Arial, sans-serif">0-1</text>
+                
+                <line x1="785" y1="155" x2="635" y2="355" stroke="#9c27b0" stroke-width="2" marker-end="url(#purple-arrow)"/>
+                <text x="670" y="345" font-size="9" fill="#9c27b0" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(-53 670 345)">configure</text>
+                <circle cx="654" cy="330" r="8" fill="#fff" stroke="#9c27b0" stroke-width="2"/>
+                <text x="654" y="335" text-anchor="middle" font-size="8" font-weight="bold" fill="#9c27b0" font-family="Arial, sans-serif">0-5</text>
+                
+                <line x1="760" y1="260" x2="660" y2="260" stroke="#9c27b0" stroke-width="3" marker-end="url(#purple-arrow)"/>
+                <text x="730" y="250" text-anchor="middle" font-size="9" fill="#9c27b0" font-weight="bold">verify</text>
+                <circle cx="730" cy="260" r="8" fill="#fff" stroke="#9c27b0" stroke-width="2"/>
+                <text x="730" y="265" text-anchor="middle" font-size="8" font-weight="bold" fill="#9c27b0" font-family="Arial, sans-serif">0-2</text>
+                
+                <line x1="520" y1="260" x2="460" y2="260" stroke="#9c27b0" stroke-width="3" marker-end="url(#purple-arrow)"/>
+                <text x="490" y="250" text-anchor="middle" font-size="9" fill="#9c27b0" font-weight="bold">compile</text>
+                <circle cx="490" cy="260" r="8" fill="#fff" stroke="#9c27b0" stroke-width="2"/>
+                <text x="490" y="265" text-anchor="middle" font-size="8" font-weight="bold" fill="#9c27b0" font-family="Arial, sans-serif">0-3</text>
+                
+                <line x1="320" y1="250" x2="220" y2="250" stroke="#9c27b0" stroke-width="2" marker-end="url(#purple-arrow)"/>
+                <text x="270" y="240" text-anchor="middle" font-size="9" fill="#9c27b0" font-weight="bold">attach to hookpoint</text>
+                <circle cx="270" cy="250" r="8" fill="#fff" stroke="#9c27b0" stroke-width="2"/>
+                <text x="270" y="255" text-anchor="middle" font-size="8" font-weight="bold" fill="#9c27b0" font-family="Arial, sans-serif">0-4</text>
+                
+                <!-- RUNTIME PHASE - Various Colors -->
+                <line x1="460" y1="240" x2="660" y2="140" stroke="#42a5f5" stroke-width="2" marker-end="url(#blue-arrow)"/>
+                <text x="570" y="180" font-size="9" fill="#42a5f5" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(-27 570 180)">observations</text>
+                <circle cx="560" cy="190" r="8" fill="#fff" stroke="#42a5f5" stroke-width="2"/>
+                <text x="560" y="195" text-anchor="middle" font-size="9" font-weight="bold" fill="#42a5f5" font-family="Arial, sans-serif">5</text>
+                
+                <!-- BIDIRECTIONAL ARROW 6 with two-line labels -->
+                <line x1="630" y1="350" x2="780" y2="150" stroke="#66bb6a" stroke-width="2" marker-end="url(#green-arrow)" marker-start="url(#green-arrow-start)"/>
+                <text x="700" y="240" font-size="9" fill="#388e3c" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(-53 700 240)">read data / update policies</text>
+                <circle cx="750" cy="190" r="8" fill="#fff" stroke="#66bb6a" stroke-width="2"/>
+                <text x="750" y="195" text-anchor="middle" font-size="9" font-weight="bold" fill="#388e3c" font-family="Arial, sans-serif">6</text>
+                
+                <line x1="420" y1="290" x2="560" y2="380" stroke="#42a5f5" stroke-width="2" marker-end="url(#blue-arrow)" marker-start="url(#blue-arrow-start)"/>
+                <text x="485" y="315" font-size="9" fill="#42a5f5" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(32 485 315)">exchange</text>
+                <circle cx="485" cy="332" r="8" fill="#fff" stroke="#42a5f5" stroke-width="2"/>
+                <text x="485" y="337" text-anchor="middle" font-size="9" font-weight="bold" fill="#42a5f5" font-family="Arial, sans-serif">3</text>
+                
+                <line x1="220" y1="270" x2="320" y2="270" stroke="#ff7043" stroke-width="2" marker-end="url(#orange-arrow)"/>
+                <text x="270" y="285" text-anchor="middle" font-size="9" fill="#ff7043" font-weight="bold">trigger</text>
+                <circle cx="270" cy="270" r="8" fill="#fff" stroke="#ff7043" stroke-width="2"/>
+                <text x="270" y="275" text-anchor="middle" font-size="9" font-weight="bold" fill="#ff7043" font-family="Arial, sans-serif">2</text>
+                
+                <line x1="400" y1="290" x2="400" y2="350" stroke="#42a5f5" stroke-width="2" marker-end="url(#blue-arrow)" marker-start="url(#blue-arrow-start)"/>
+                <text x="385" y="290" font-size="8" fill="#42a5f5" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(90 385 290)">enable/exchange</text>
+                <circle cx="400" cy="320" r="8" fill="#fff" stroke="#42a5f5" stroke-width="2"/>
+                <text x="400" y="325" text-anchor="middle" font-size="9" font-weight="bold" fill="#42a5f5" font-family="Arial, sans-serif">4</text>
+                
+                <!-- Process Flow Labels - Now inside Kernel Space -->
+                <text x="490" y="470" text-anchor="middle" font-size="12" font-weight="bold" fill="#1565c0" font-family="Arial, sans-serif">Process Flow:</text>
+                
+                <!-- Initialization Phase -->
+                <text x="80" y="490" font-size="11" font-weight="bold" fill="#9c27b0" font-family="Arial, sans-serif">Initialization Phase (One-time):</text>
+                <text x="80" y="505" font-size="10" fill="#9c27b0" font-family="Arial, sans-serif">0-1. eBPF Tools load programs into kernel via verifier</text>
+                <text x="80" y="520" font-size="10" fill="#9c27b0" font-family="Arial, sans-serif">0-2. Verifier ensures program safety and passes to JIT</text>
+                <text x="80" y="535" font-size="10" fill="#9c27b0" font-family="Arial, sans-serif">0-3. JIT compiler optimizes and compiles programs</text>
+                <text x="80" y="550" font-size="10" fill="#9c27b0" font-family="Arial, sans-serif">0-4. Programs attach to hook points for monitoring</text>
+                <text x="80" y="565" font-size="10" fill="#9c27b0" font-family="Arial, sans-serif">0-5. eBPF Tools configure initial policies in maps</text>
+                
+                <!-- Runtime Phase -->
+                <text x="500" y="490" font-size="11" font-weight="bold" fill="#1565c0" font-family="Arial, sans-serif">Runtime Phase (Continuous):</text>
+                <text x="500" y="505" font-size="10" fill="#1565c0" font-family="Arial, sans-serif">1. Monitored application makes events (send traffic, make system calls, etc) at hook points</text>
+                <text x="500" y="520" font-size="10" fill="#1565c0" font-family="Arial, sans-serif">2. Hook points trigger eBPF programs (the kernel part of the eBPF tool)</text>
+                <text x="500" y="535" font-size="10" fill="#1565c0" font-family="Arial, sans-serif">3. eBPF programs exchange data with maps (read policies, store results)</text>
+                <text x="500" y="550" font-size="10" fill="#1565c0" font-family="Arial, sans-serif">4. eBPF programs enable data injection/packet decisions</text>
+                <text x="500" y="565" font-size="10" fill="#1565c0" font-family="Arial, sans-serif">5. eBPF programs stream observations to userspace tools (send collected data for analysis)</text>
+                <text x="500" y="580" font-size="10" fill="#1565c0" font-family="Arial, sans-serif">6. eBPF programs store results in maps (packet drop/allow decisions, injection results, etc)</text>
+                <text x="500" y="595" font-size="10" fill="#1565c0" font-family="Arial, sans-serif">7. eBPF Tools read stored decisions and dynamically update policies in maps</text>
+            </g>
+            
+            <!-- COLOR LEGEND -->
+            <g transform="translate(100, 730)">
+                <text x="390" y="0" text-anchor="middle" font-size="14" font-weight="bold" fill="#333" font-family="Arial, sans-serif">Color Legend</text>
+                
+                <!-- Row 1 -->
+                <rect x="0" y="15" width="18" height="15" fill="#4caf50" stroke="#2e7d32" stroke-width="1" rx="3"/>
+                <text x="25" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">Userspace Applications</text>
+                
+                <rect x="170" y="15" width="18" height="15" fill="#26a69a" stroke="#00695c" stroke-width="1" rx="3"/>
+                <text x="195" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">Kernel Components</text>
+                
+                <rect x="320" y="15" width="18" height="15" fill="#42a5f5" stroke="#1976d2" stroke-width="1" rx="3"/>
+                <text x="345" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">eBPF Programs & Capabilities</text>
+                
+                <rect x="520" y="15" width="18" height="15" fill="#ff7043" stroke="#d84315" stroke-width="1" rx="3"/>
+                <text x="545" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">Hook Points & Triggers</text>
+                
+                <!-- Row 2 -->
+                <rect x="0" y="40" width="18" height="15" fill="#616161" stroke="none" stroke-width="1" rx="3"/>
+                <text x="25" y="51" font-size="11" fill="#333" font-family="Arial, sans-serif">Hardware Infrastructure</text>
+                
+                <rect x="170" y="40" width="18" height="15" fill="#9c27b0" stroke="#7b1fa2" stroke-width="1" rx="3"/>
+                <text x="195" y="51" font-size="11" fill="#333" font-family="Arial, sans-serif">Initialization Phase (One-time)</text>
+            </g>
+            
+            <!-- Attribution -->
+            <text x="880" y="800" font-size="10" fill="#7f8c8d" font-style="italic" font-family="Arial, sans-serif">Abdullah Mohammed</text>
+        </svg>
+    </div>
+</body>
+</html>
