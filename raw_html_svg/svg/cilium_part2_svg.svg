@@ -1,0 +1,174 @@
+<svg width="1140" height="640" viewBox="0 0 1140 640" xmlns="http://www.w3.org/2000/svg">
+  <!-- Arrow definitions -->
+  <defs>
+    <marker id="blue-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#2196f3"/>
+    </marker>
+    <marker id="orange-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#ff9800"/>
+    </marker>
+    <marker id="purple-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#673ab7"/>
+    </marker>
+    <marker id="purple2-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#9c27b0"/>
+    </marker>
+    <marker id="green-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#4caf50"/>
+    </marker>
+    <marker id="teal-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#26a69a"/>
+    </marker>
+  </defs>
+  
+  <!-- PART 2: INBOUND TRAFFIC FLOW -->
+  <g id="part2" transform="translate(0, 20)">
+    <!-- Title -->
+    <text x="570" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#2c3e50" font-family="Arial, sans-serif">Part 2: Inbound Traffic Flow - Policy Verification &amp; Flow Tracking</text>
+    <text x="570" y="50" text-anchor="middle" font-size="14" fill="#666" font-family="Arial, sans-serif">How Cilium verifies ingress traffic and generates flow logs</text>
+    
+    <!-- Background layers -->
+    <rect x="70" y="70" width="1000" height="100" fill="#e8f5e8" stroke="#27ae60" stroke-width="2" rx="8"/>
+    <text x="570" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#27ae60" font-family="Arial, sans-serif">Userspace Applications</text>
+    
+    <rect x="70" y="190" width="1000" height="320" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" rx="8"/>
+    <text x="570" y="210" text-anchor="middle" font-size="16" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">Kernel Space</text>
+    
+    <!-- Applications -->
+    <rect x="920" y="100" width="120" height="50" fill="#4caf50" stroke="#2e7d32" stroke-width="2" rx="5"/>
+    <text x="980" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">Backend Pod</text>
+    <text x="980" y="135" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Receives traffic</text>
+    
+    <rect x="80" y="100" width="120" height="50" fill="#4caf50" stroke="#2e7d32" stroke-width="2" rx="5"/>
+    <text x="140" y="115" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Cilium Agent</text>
+    <text x="140" y="128" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Flow Analysis</text>
+    <text x="140" y="140" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Network Visibility</text>
+    
+    <!-- Kernel Components -->
+    <rect x="100" y="230" width="140" height="50" fill="#ff9800" stroke="#f57c00" stroke-width="2" rx="5"/>
+    <text x="170" y="245" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">Network Stack</text>
+    <text x="170" y="260" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Incoming Packet</text>
+    <text x="170" y="275" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">From Frontend Pod</text>
+    
+    <rect x="300" y="230" width="140" height="50" fill="#ff7043" stroke="#d84315" stroke-width="2" rx="5"/>
+    <text x="370" y="250" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">tc ingress</text>
+    <text x="370" y="265" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Traffic Control Hook</text>
+    
+    <rect x="500" y="230" width="120" height="50" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+    <text x="560" y="240" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Cilium eBPF</text>
+    <text x="560" y="255" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Program (CeP)</text>
+    <text x="560" y="270" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Packet Parsing</text>
+    <text x="560" y="280" text-anchor="middle" font-size="7" fill="white" font-family="Arial, sans-serif">bpf_skb_load_bytes()</text>
+    
+    <rect x="680" y="360" width="160" height="50" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+    <text x="760" y="370" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">CeP Flow Observability</text>
+    <text x="760" y="385" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Metrics Collection</text>
+    <text x="760" y="398" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Record Generation</text>
+    <text x="760" y="411" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Lifecycle Tracking</text>
+    
+    <!-- Policy Verification moved up -->
+    <rect x="680" y="230" width="160" height="50" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+    <text x="760" y="245" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">CeP Policy Verification</text>
+    <text x="760" y="260" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Check Source Identity</text>
+    <text x="760" y="275" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">bpf_map_lookup_elem()</text>
+    
+    <!-- Policy Decision block -->
+    <rect x="910" y="230" width="140" height="50" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+    <text x="980" y="240" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">CeP Policy Decision</text>
+    <text x="980" y="255" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Allow / Drop Traffic</text>
+    <text x="980" y="270" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">TC_ACT_OK / TC_ACT_SHOT</text>
+    
+    <!-- eBPF Maps -->
+    <rect x="910" y="360" width="140" height="50" fill="#26a69a" stroke="#00695c" stroke-width="2" rx="5"/>
+    <text x="980" y="375" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">eBPF Maps</text>
+    <text x="980" y="390" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Policy Storage</text>
+    <text x="980" y="405" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Kernel Memory</text>
+    
+    <!-- Flow Arrows -->
+    <line x1="240" y1="255" x2="300" y2="255" stroke="#ff9800" stroke-width="3" marker-end="url(#orange-arrow)"/>
+    <text x="245" y="245" font-size="9" fill="#ff9800" font-weight="bold" font-family="Arial, sans-serif">packet</text>
+    <circle cx="270" cy="255" r="8" fill="#fff" stroke="#ff9800" stroke-width="2"/>
+    <text x="270" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#ff9800" font-family="Arial, sans-serif">1</text>
+    
+    <line x1="440" y1="255" x2="500" y2="255" stroke="#ff7043" stroke-width="3" marker-end="url(#orange-arrow)"/>
+    <text x="445" y="245" font-size="9" fill="#ff7043" font-weight="bold" font-family="Arial, sans-serif">triggers</text>
+    <circle cx="470" cy="255" r="8" fill="#fff" stroke="#ff7043" stroke-width="2"/>
+    <text x="470" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#ff7043" font-family="Arial, sans-serif">2</text>
+    
+    <line x1="620" y1="255" x2="680" y2="255" stroke="#2196f3" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="625" y="245" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif">verifies</text>
+    <circle cx="650" cy="255" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="650" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">4</text>
+    
+    <line x1="620" y1="275" x2="680" y2="385" stroke="#2196f3" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="655" y="310" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(55 655 310)">observes</text>
+    <circle cx="650" cy="330" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="650" y="335" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">4</text>
+    
+    <line x1="980" y1="230" x2="980" y2="150" stroke="#4caf50" stroke-width="3" marker-end="url(#green-arrow)"/>
+    <text x="995" y="185" font-size="9" fill="#4caf50" font-weight="bold" font-family="Arial, sans-serif">allows traffic</text>
+    <circle cx="980" cy="190" r="8" fill="#fff" stroke="#4caf50" stroke-width="2"/>
+    <text x="980" y="195" text-anchor="middle" font-size="9" font-weight="bold" fill="#4caf50" font-family="Arial, sans-serif">7</text>
+    
+    <!-- Connect Policy Verification to Policy Decision -->
+    <line x1="840" y1="255" x2="910" y2="255" stroke="#2196f3" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="870" y="245" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif">decides</text>
+    <circle cx="875" cy="255" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="875" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">6</text>
+    
+    <!-- Connect Policy Verification to eBPF Maps -->
+    <line x1="840" y1="255" x2="910" y2="385" stroke="#26a69a" stroke-width="2" marker-end="url(#teal-arrow)"/>
+    <text x="900" y="335" font-size="9" fill="#26a69a" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(70 900 335)">reads</text>
+    <circle cx="890" cy="345" r="8" fill="#fff" stroke="#26a69a" stroke-width="2"/>
+    <text x="890" y="350" text-anchor="middle" font-size="9" font-weight="bold" fill="#26a69a" font-family="Arial, sans-serif">5</text>
+    
+    <!-- Connect Policy Decision to Flow Observability -->
+    <line x1="910" y1="280" x2="840" y2="375" stroke="#2196f3" stroke-width="2" marker-end="url(#blue-arrow)"/>
+    <text x="850" y="340" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(-50 850 340)">verdict</text>
+    <circle cx="855" cy="350" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="855" y="355" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">8</text>
+    
+    <!-- Connect Flow Observability to Cilium Agent -->
+    <line x1="680" y1="385" x2="200" y2="125" stroke="#2196f3" stroke-width="2" marker-end="url(#blue-arrow)"/>
+    <text x="330" y="180" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(-30 330 180)">export flow data</text>
+    <circle cx="320" cy="190" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="320" y="195" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">9</text>
+    
+    <!-- Process Flow Labels -->
+    <text x="570" y="410" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a237e" font-family="Arial, sans-serif">Process Flow:</text>
+    <text x="120" y="430" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">1. Network stack receives incoming packet</text>
+    <text x="120" y="445" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">2. tc ingress hook intercepts the packet</text>
+    <text x="120" y="460" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">3. Cilium eBPF program parses packet headers and extracts metadata</text>
+    <text x="120" y="475" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">4. Policy verification AND flow observability happen simultaneously</text>
+    <text x="600" y="430" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">5. Policy verification reads eBPF Maps for policies</text>
+    <text x="600" y="445" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">6. Policy verification makes policy decision</text>
+    <text x="600" y="460" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">7. Policy decision allows traffic to Backend Pod</text>
+    <text x="600" y="475" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">8. Policy decision provides verdict to flow observability</text>
+    <text x="600" y="490" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">9. Flow observability exports complete data to Cilium Agent</text>
+  </g>
+  
+  <!-- COLOR LEGEND -->
+  <g transform="translate(150, 550)">
+    <text x="420" y="0" text-anchor="middle" font-size="14" font-weight="bold" fill="#333" font-family="Arial, sans-serif">Color Legend</text>
+    
+    <!-- Row 1 -->
+    <rect x="0" y="15" width="18" height="15" fill="#4caf50" stroke="#2e7d32" stroke-width="1" rx="3"/>
+    <text x="25" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">Userspace Applications</text>
+    
+    <rect x="200" y="15" width="18" height="15" fill="#26a69a" stroke="#00695c" stroke-width="1" rx="3"/>
+    <text x="225" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">eBPF Maps (Kernel Storage)</text>
+    
+    <rect x="420" y="15" width="18" height="15" fill="#ff7043" stroke="#d84315" stroke-width="1" rx="3"/>
+    <text x="445" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">Traffic Control Hooks</text>
+    
+    <rect x="640" y="15" width="18" height="15" fill="#ff9800" stroke="#f57c00" stroke-width="1" rx="3"/>
+    <text x="665" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">Network Stack</text>
+    
+    <!-- Row 2 -->
+    <rect x="100" y="40" width="18" height="15" fill="#42a5f5" stroke="#1976d2" stroke-width="1" rx="3"/>
+    <text x="125" y="51" font-size="11" fill="#333" font-family="Arial, sans-serif">Cilium eBPF Program and Its Functions</text>
+  </g>
+  
+  <!-- Attribution -->
+  <text x="980" y="620" font-size="10" fill="#7f8c8d" font-style="italic" font-family="Arial, sans-serif">Abdullah Mohammed</text>
+</svg>

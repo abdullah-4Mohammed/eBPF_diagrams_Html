@@ -1,0 +1,188 @@
+<svg width="1140" height="650" viewBox="0 0 1140 650" xmlns="http://www.w3.org/2000/svg">
+  <!-- Arrow definitions -->
+  <defs>
+    <marker id="blue-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#2196f3"/>
+    </marker>
+    <marker id="orange-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#ff9800"/>
+    </marker>
+    <marker id="purple-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#673ab7"/>
+    </marker>
+    <marker id="green-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#4caf50"/>
+    </marker>
+    <marker id="teal-arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon points="0 0, 6 2.5, 0 5" fill="#26a69a"/>
+    </marker>
+  </defs>
+  
+  <!-- DATADOG PART 2: NETWORK ACTIVITY CORRELATION -->
+  <g id="datadog-part2" transform="translate(0, 20)">
+    <!-- Title -->
+    <text x="570" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#2c3e50" font-family="Arial, sans-serif">Part 2: Network Activity Correlation Flow - Process-Level Network Monitoring</text>
+    <text x="570" y="50" text-anchor="middle" font-size="14" fill="#666" font-family="Arial, sans-serif">How Datadog correlates network traffic with specific processes and containers</text>
+    
+    <!-- Background layers -->
+    <rect x="70" y="70" width="1070" height="100" fill="#e8f5e8" stroke="#27ae60" stroke-width="2" rx="8"/>
+    <text x="605" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#27ae60" font-family="Arial, sans-serif">Userspace Applications</text>
+    
+    <rect x="70" y="190" width="1070" height="350" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" rx="8"/>
+    <text x="605" y="210" text-anchor="middle" font-size="16" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">Kernel Space</text>
+    
+    <!-- Applications -->
+    <rect x="100" y="100" width="140" height="50" fill="#4caf50" stroke="#2e7d32" stroke-width="2" rx="5"/>
+    <text x="170" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">Application Process</text>
+    <text x="170" y="135" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Makes Network Call</text>
+    
+    <rect x="960" y="100" width="140" height="50" fill="#4caf50" stroke="#2e7d32" stroke-width="2" rx="5"/>
+    <text x="1030" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">Datadog Agent</text>
+    <text x="1030" y="135" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Network Analysis</text>
+    
+    <!-- Kernel Components -->
+    <rect x="100" y="230" width="140" height="50" fill="#ff7043" stroke="#d84315" stroke-width="2" rx="5"/>
+    <text x="170" y="240" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">kprobe/tcp_connect</text>
+    <text x="170" y="255" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Connection Establishment</text>
+    <text x="170" y="270" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Outbound connections</text>
+    
+    <rect x="300" y="230" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+    <text x="370" y="240" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Datadog eBPF</text>
+    <text x="370" y="255" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Program (DeP)</text>
+    <text x="370" y="270" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Socket Context Extraction</text>
+    <text x="370" y="284" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">bpf_get_current_pid_tgid()</text>
+    
+    <rect x="520" y="230" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+    <text x="590" y="240" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">DeP Connection</text>
+    <text x="590" y="255" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Tracking</text>
+    <text x="590" y="270" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Socket information</text>
+    <text x="590" y="284" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Network flow metrics</text>
+    
+    <rect x="740" y="230" width="140" height="60" fill="#26a69a" stroke="#00695c" stroke-width="2" rx="5"/>
+    <text x="810" y="245" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="Arial, sans-serif">eBPF Maps</text>
+    <text x="810" y="260" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Network Metadata</text>
+    <text x="810" y="275" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Socket Context</text>
+    
+    <rect x="960" y="230" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+    <text x="1030" y="240" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">DeP Data Export</text>
+    <text x="1030" y="255" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Send to Userspace</text>
+    <text x="1030" y="270" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Network Metrics</text>
+    <text x="1030" y="284" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">bpf_perf_event_output()</text>
+    
+    <!-- Lower Row Blocks -->
+    <rect x="100" y="350" width="140" height="50" fill="#ff7043" stroke="#d84315" stroke-width="2" rx="5"/>
+    <text x="170" y="360" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">kprobe/tcp_sendmsg</text>
+    <text x="170" y="375" text-anchor="middle" font-size="9" fill="white" font-family="Arial, sans-serif">Data Transmission</text>
+    <text x="170" y="390" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Socket buffer data</text>
+    
+    <rect x="520" y="350" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+    <text x="590" y="360" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">DeP Socket</text>
+    <text x="590" y="375" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Information</text>
+    <text x="590" y="390" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Bandwidth tracking</text>
+    <text x="590" y="404" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Connection patterns</text>
+    
+    <rect x="740" y="350" width="140" height="60" fill="#42a5f5" stroke="#1976d2" stroke-width="2" rx="5"/>
+    <text x="810" y="360" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">DeP Network</text>
+    <text x="810" y="375" text-anchor="middle" font-size="10" font-weight="bold" fill="white" font-family="Arial, sans-serif">Attribution</text>
+    <text x="810" y="390" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Process correlation</text>
+    <text x="810" y="404" text-anchor="middle" font-size="8" fill="white" font-family="Arial, sans-serif">Container context</text>
+    
+    <!-- Flow Arrows -->
+    <line x1="220" y1="150" x2="220" y2="230" stroke="#4caf50" stroke-width="3" marker-end="url(#green-arrow)"/>
+    <text x="245" y="185" text-anchor="middle" font-size="9" fill="#4caf50" font-weight="bold" font-family="Arial, sans-serif">connect()</text>
+    <circle cx="220" cy="190" r="8" fill="#fff" stroke="#4caf50" stroke-width="2"/>
+    <text x="220" y="195" text-anchor="middle" font-size="9" font-weight="bold" fill="#4caf50" font-family="Arial, sans-serif">1</text>
+    
+    <line x1="110" y1="150" x2="110" y2="350" stroke="#4caf50" stroke-width="3" marker-end="url(#green-arrow)"/>
+    <text x="145" y="185" text-anchor="middle" font-size="9" fill="#4caf50" font-weight="bold" font-family="Arial, sans-serif">sendmsg()</text>
+    <circle cx="110" cy="190" r="8" fill="#fff" stroke="#4caf50" stroke-width="2"/>
+    <text x="110" y="195" text-anchor="middle" font-size="9" font-weight="bold" fill="#4caf50" font-family="Arial, sans-serif">2</text>
+    
+    <line x1="240" y1="255" x2="300" y2="255" stroke="#ff7043" stroke-width="3" marker-end="url(#orange-arrow)"/>
+    <text x="270" y="245" text-anchor="middle" font-size="9" fill="#ff7043" font-weight="bold" font-family="Arial, sans-serif">triggers</text>
+    <circle cx="270" cy="255" r="8" fill="#fff" stroke="#ff7043" stroke-width="2"/>
+    <text x="270" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#ff7043" font-family="Arial, sans-serif">3</text>
+    
+    <line x1="240" y1="375" x2="300" y2="290" stroke="#ff7043" stroke-width="3" marker-end="url(#orange-arrow)"/>
+    <text x="265" y="320" text-anchor="middle" font-size="9" fill="#ff7043" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(-55 265 320)">triggers</text>
+    <circle cx="270" cy="328" r="8" fill="#fff" stroke="#ff7043" stroke-width="2"/>
+    <text x="270" y="333" text-anchor="middle" font-size="9" font-weight="bold" fill="#ff7043" font-family="Arial, sans-serif">4</text>
+    
+    <!-- Simultaneous operations from eBPF program -->
+    <line x1="440" y1="255" x2="520" y2="255" stroke="#2196f3" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="480" y="245" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif">tracks</text>
+    <circle cx="480" cy="255" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="480" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">5</text>
+    
+    <!-- Simultaneous Socket Information capture -->
+    <line x1="440" y1="275" x2="520" y2="380" stroke="#2196f3" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="460" y="335" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(45 460 335)">captures</text>
+    <circle cx="480" cy="328" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="480" y="333" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">5</text>
+    
+    <!-- Connection Tracking stores to eBPF Maps -->
+    <line x1="660" y1="255" x2="740" y2="255" stroke="#2196f3" stroke-width="2" marker-end="url(#blue-arrow)"/>
+    <text x="700" y="245" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif">stores</text>
+    <circle cx="700" cy="255" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="700" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">6</text>
+    
+    <!-- Socket Information to Network Attribution -->
+    <line x1="660" y1="380" x2="740" y2="380" stroke="#2196f3" stroke-width="2" marker-end="url(#blue-arrow)"/>
+    <text x="700" y="370" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif">feeds</text>
+    <circle cx="700" cy="380" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="700" y="385" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">7</text>
+    
+    <!-- Network Attribution reads from eBPF Maps -->
+    <line x1="810" y1="290" x2="810" y2="350" stroke="#26a69a" stroke-width="2" marker-end="url(#teal-arrow)"/>
+    <text x="830" y="320" text-anchor="middle" font-size="7" fill="#26a69a" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(-90 830 320)">reads context</text>
+    <circle cx="810" cy="320" r="8" fill="#fff" stroke="#26a69a" stroke-width="2"/>
+    <text x="810" y="325" text-anchor="middle" font-size="9" font-weight="bold" fill="#26a69a" font-family="Arial, sans-serif">8</text>
+    
+    <!-- Network Attribution to Data Export -->
+    <line x1="880" y1="380" x2="960" y2="255" stroke="#2196f3" stroke-width="2" marker-end="url(#blue-arrow)"/>
+    <text x="940" y="315" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif" transform="rotate(-55 940 315)">exports</text>
+    <circle cx="920" cy="318" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="920" y="323" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">9</text>
+    
+    <!-- Data Export to Datadog Agent -->
+    <line x1="1030" y1="230" x2="1030" y2="150" stroke="#2196f3" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="1065" y="183" text-anchor="middle" font-size="9" fill="#2196f3" font-weight="bold" font-family="Arial, sans-serif">network data</text>
+    <circle cx="1030" cy="180" r="8" fill="#fff" stroke="#2196f3" stroke-width="2"/>
+    <text x="1030" y="185" text-anchor="middle" font-size="9" font-weight="bold" fill="#2196f3" font-family="Arial, sans-serif">10</text>
+    
+    <!-- Process Flow Labels -->
+    <text x="570" y="450" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a237e" font-family="Arial, sans-serif">Process Flow:</text>
+    <text x="120" y="470" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">1. Application process calls connect() system call</text>
+    <text x="120" y="485" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">2. Application process calls sendmsg() system call</text>
+    <text x="120" y="500" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">3. kprobe/tcp_connect triggers eBPF program</text>
+    <text x="120" y="515" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">4. kprobe/tcp_sendmsg triggers eBPF program</text>
+    <text x="120" y="530" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">5. eBPF program tracks connection AND captures socket information simultaneously</text>
+    <text x="635" y="470" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">6. Connection tracking stores network metadata in eBPF Maps</text>
+    <text x="635" y="485" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">7. Socket information feeds network attribution</text>
+    <text x="635" y="500" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">8. Network attribution reads context from eBPF Maps</text>
+    <text x="635" y="515" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">9. Network attribution exports to data export</text>
+    <text x="635" y="530" font-size="10" fill="#1a237e" font-family="Arial, sans-serif">10. Data export sends network data to Datadog Agent</text>
+  </g>
+  
+  <!-- COLOR LEGEND -->
+  <g transform="translate(150, 580)">
+    <text x="420" y="0" text-anchor="middle" font-size="14" font-weight="bold" fill="#333" font-family="Arial, sans-serif">Color Legend</text>
+    
+    <!-- Row 1 -->
+    <rect x="0" y="15" width="18" height="15" fill="#4caf50" stroke="#2e7d32" stroke-width="1" rx="3"/>
+    <text x="25" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">Userspace Applications</text>
+    
+    <rect x="200" y="15" width="18" height="15" fill="#26a69a" stroke="#00695c" stroke-width="1" rx="3"/>
+    <text x="225" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">eBPF Maps (Kernel Storage)</text>
+    
+    <rect x="420" y="15" width="18" height="15" fill="#ff7043" stroke="#d84315" stroke-width="1" rx="3"/>
+    <text x="445" y="26" font-size="11" fill="#333" font-family="Arial, sans-serif">Network System Call Hooks (tcp_connect &amp; tcp_sendmsg)</text>
+    
+    <!-- Row 2 -->
+    <rect x="100" y="40" width="18" height="15" fill="#42a5f5" stroke="#1976d2" stroke-width="1" rx="3"/>
+    <text x="125" y="51" font-size="11" fill="#333" font-family="Arial, sans-serif">Datadog eBPF Program and Its Functions</text>
+  </g>
+  
+  <!-- Attribution -->
+  <text x="980" y="630" font-size="10" fill="#7f8c8d" font-style="italic" font-family="Arial, sans-serif">Abdullah Mohammed</text>
+</svg>
